@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <div class="search">
+        <input type="text" placeholder="Please enter city">
+        <button>Submit</button>
+    </div>
+    <div class="error">
+        <p>Sorry. This is not a valid city. Please enter another one.</p>
+    </div>
+    <div class="weather">
+        <img src="/directory/logos/clear.png" class="logos">
+        <h1 class="temperature">75&deg; C</h1>
+        <h2 class="city">New York City</h2>
+        <div class="others">
+            <div class="col">
+                <div>
+                    <p class="high">78&deg; C</p>
+                    <p>High</p>
+                </div>
+            </div>
+            <div class="col">
+                <div>
+                    <p class="low">63&deg; C</p>
+                    <p>Low</p>
+                </div>
+            </div>
+            <div class="col">
+                <div>
+                    <p class="feels">73&deg; C</p>
+                    <p>Feels Like</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    const apiKey = "5d63034cec03e147f202c9fc2fd11631";
+    const URL = "https://api.openweathermap.org/data/2.5/weather?units=imperial&q=";
+
+    const searchBar = document.querySelector(".search input");
+    const searchBtn = document.querySelector(".search button");
+    const logo = document.querySelector(".logos");
+
+    async function getWeather(city){
+        const response = await fetch(URL + city + `&appid=${apiKey}`);
+        if(response.status == 404){
+            document.querySelector(".error").style.display = "block";
+            document.querySelector(".weather").style.display = "none";
+        }
+        else{
+            let data = await response.json();
+
+            document.querySelector(".city").innerHTML = data.name;
+            document.querySelector(".temperature").innerHTML = Math.round(data.main.temp) + "&deg; F";
+            document.querySelector(".high").innerHTML = Math.round(data.main.temp_max) + "&deg; F";
+            document.querySelector(".low").innerHTML = Math.round(data.main.temp_min) + "&deg; F";
+            document.querySelector(".feels").innerHTML = Math.round(data.main.feels_like) + "&deg; F";
+
+            if(data.weather[0].main == "Clouds"){
+                logo.src = "/logos/clouds.png";
+            }
+            else if(data.weather[0].main == "Clear"){
+                logo.src = "/logos/clouds.png";
+            }
+            else if(data.weather[0].main == "Rain"){
+                logo.src = "/logos/rain.png";
+            }
+            else if(data.weather[0].main == "Drizzle"){
+                logo.src = "/logos/drizzle.png";
+            }
+            else if(data.weather[0].main == "Mist"){
+                logo.src = "/logos/mist.png";
+            }
+            else if(data.weather[0].main == "Snow"){
+                logo.src = "/logos/snow.png";
+            }
+
+            document.querySelector(".weather").style.display= "block";
+            document.querySelector(".error").style.display= "none";
+        }
+    }
+
+    searchBtn.addEventListener("click",()=>{
+        getWeather(searchBar.value)
+    });
+</script>
+</body>
+</html>
