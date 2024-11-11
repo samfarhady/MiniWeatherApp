@@ -1,3 +1,2 @@
 # MiniWeatherApp
-# MiniWeatherApp
-# MiniWeatherApp
+
